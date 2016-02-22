@@ -5,6 +5,9 @@
     factory(jQuery);
   }
 }(function($) {
-  console.log('This immediately executes');
-  return this;
+  var Donut = function() {
+    return this;
+  };
+
+  $.fn['Donut'] = Donut;
 }));
