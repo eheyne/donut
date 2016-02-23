@@ -9,13 +9,17 @@
   "devDependencies": {
     "chai": "^3.5.0",
     "express": "^4.13.4",
-    "filecopy": "^1.0.8",
     "jshint": "^2.9.1",
     "mocha": "^2.4.5"
   },
   "scripts": {
     "lint": "jshint *.js",
-    "test": "rm -rf .test && mkdir .test && node ./tasks/copyTests.js && node ./tasks/server.js ../.test",
+    "test:clean": "rm -rf .test && mkdir .test",
+    "test:copyChai": "cp ./node_modules/chai/chai.js .test",
+    "test:copyHtml": "cp ./tests/index.html .test",
+    "test:copyMocha": "cp ./node_modules/mocha/mocha.* .test",
+    "test:copyTests": "cp ./tests/donutTest.js .test && cp donut.js .test",
+    "test": "npm run test:clean && npm run test:copyChai && npm run test:copyHtml && npm run test:copyMocha && cp ./node_modules/jquery/dist/jquery.js .test && npm run test:copyTests  && node ./tasks/server.js ../.test",
     "pretest": "npm run lint"
   },
   "keywords": [],
