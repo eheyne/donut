@@ -1,7 +1,4 @@
-var chai = require('chai');
 var expect = chai.expect;
-
-var Donut = require('../donut');
 
 describe('donut', function() {
   var donut;

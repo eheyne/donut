@@ -16,9 +16,9 @@
     "lint": "jshint *.js",
     "test:clean": "rm -rf .test && mkdir .test",
     "test:copyChai": "cp ./node_modules/chai/chai.js .test",
-    "test:copyHtml": "cp ./tests/index.html .test",
+    "test:copyHtml": "cp ./test/index.html .test",
     "test:copyMocha": "cp ./node_modules/mocha/mocha.* .test",
-    "test:copyTests": "cp ./tests/donutTest.js .test && cp donut.js .test",
+    "test:copyTests": "cp ./test/donutTest.spec.js .test/donutTests.js && cp donut.js .test",
     "test": "npm run test:clean && npm run test:copyChai && npm run test:copyHtml && npm run test:copyMocha && cp ./node_modules/jquery/dist/jquery.js .test && npm run test:copyTests  && node ./tasks/server.js ../.test",
     "pretest": "npm run lint"
   },
