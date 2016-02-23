@@ -25,5 +25,5 @@
     return this;
   };
 
-  $.fn['Donut'] = Donut;
+  $.fn.Donut = Donut;
 }));

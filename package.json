@@ -10,10 +10,13 @@
     "chai": "^3.5.0",
     "express": "^4.13.4",
     "filecopy": "^1.0.8",
+    "jshint": "^2.9.1",
     "mocha": "^2.4.5"
   },
   "scripts": {
-    "test": "rm -rf .test && mkdir .test && node ./tasks/copyTests.js && node ./tasks/server.js ../.test"
+    "lint": "jshint *.js",
+    "test": "rm -rf .test && mkdir .test && node ./tasks/copyTests.js && node ./tasks/server.js ../.test",
+    "pretest": "npm run lint"
   },
   "keywords": [],
   "author": "",
