@@ -60,4 +60,10 @@ describe('donut', function() {
     expect(donut.width()).to.equal(svg.width());
     expect(donut.height()).to.equal(svg.height() + offset);
   });
+
+  it('should create a background ring as a SVG path element', function() {
+    var background = $('#donut').find('svg > path.background');
+    expect(background.length).to.be.above(0);
+    expect(background[0].tagName).to.equal('path');
+  });
 });
