@@ -3,6 +3,9 @@ var expect = chai.expect;
 describe('donut', function() {
   var donut;
   beforeEach(function() {
+    $('body').append('<div id="donut"></div>');
+    $('body').append('<div class="donuts"></div>');
+    $('body').append('<div class="donuts"></div>');
     donut = $('#donut').Donut();
   });
 
