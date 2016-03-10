@@ -5,7 +5,7 @@
     factory(jQuery);
   }
 }(function($) {
-  var Donut = function() {
+  var Donut = function(config) {
     var svgNamespace = 'http://www.w3.org/2000/svg';
     var $this = $(this);
 
@@ -17,21 +17,22 @@
         var svgElement = svgElements[index];
         svgElement.setAttribute('width', $this.width());
         svgElement.setAttribute('height', $this.height());
+        svgElement.setAttribute('class', 'donut');
 
         var $svgElement = $(svgElement);
         var background = backgroundRing($svgElement, 4);
         $svgElement.append(background);
+
+        if (config) {
+          var dataPaths = createDataPaths($svgElement, config);
+          dataPaths.forEach(function(dataPath) {
+            $svgElement.append(dataPath);
+          });
+        }
+        
       });
     } else {
       console.log('No elements found in selector', this.selector);
-    }
-
-    function createPath(strokeWidth) {
-      var path = document.createElementNS(svgNamespace, 'path');
-      path.setAttribute('stroke-width', strokeWidth);
-      path.setAttribute('fill', 'none');
-      path.setAttribute('stroke', '#EFEFEF');
-      return path;
     }
 
     function calculatePathD($svg, percentage, clockWise, strokeWidth) {
@@ -73,12 +74,31 @@
       var clockWise = true;
       var percentage = 100;
 
-      var path = createPath(strokeWidth);
+      var path = document.createElementNS(svgNamespace, 'path');
       path.setAttribute('class', 'background');
 
       var d = calculatePathD($svg, percentage, clockWise, strokeWidth);
       path.setAttribute('d', d);
       return path;
+    }
+
+    function calcPercentage(config) {
+      return (config.data / config.total) * 100;
+    }
+
+    function createDataPaths($svg, config) {
+      var paths = [];
+      var clockWise = true;
+      var percentage = calcPercentage(config);
+
+      var path = document.createElementNS(svgNamespace, 'path');
+      path.setAttribute('class', 'data');
+
+      var d = calculatePathD($svg, percentage, clockWise, 4);
+      path.setAttribute('d', d);
+      paths.push(path);
+
+      return paths;
     }
 
     return this;

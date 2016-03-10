@@ -2,6 +2,7 @@
 <html>
   <head>
     <title>Donut Demo</title>
+    <link rel="stylesheet" type="text/css" href="donut.css">
     <script src="jquery.js"></script>
     <script src="donut.js"></script>
   </head>
@@ -9,7 +10,7 @@
     <div class="donuts"></div>
     <div class="donuts"></div>
     <script>
-      var donuts = $('.donuts').Donut();
+      var donuts = $('.donuts').Donut({ total: 100, data: 50 });
     </script>
   </body>
 </html>

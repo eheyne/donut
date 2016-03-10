@@ -1,0 +1,12 @@
+svg.donut > path {
+  fill: none;
+  stroke-width: 4px;
+}
+
+svg.donut > path.background {
+  stroke: #EFEFEF;
+}
+
+svg.donut > path.data {
+  stroke: rebeccapurple;
+}
