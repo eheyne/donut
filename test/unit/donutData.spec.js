@@ -20,4 +20,10 @@ describe('donut data plotting', function() {
     expect(data.length).to.be.above(0);
     expect(data[0].tagName).to.equal('path');
   });
+
+  it('should not plot any data bar if total is missing and a single data point is given', function() {
+    donut = $('#donut').Donut({ data: 50 });
+    var data = $('#donut').find('svg > path.data');
+    expect(data.length).to.be.equal(0);
+  });
 });

@@ -12,6 +12,7 @@
     if ($this.length > 0) {
       $this.append('<svg />');
       var svgElements = $this.find('svg');
+      var indexOfSvgElement = 0;
 
       svgElements.each(function(index) {
         var svgElement = svgElements[index];
@@ -24,12 +25,13 @@
         $svgElement.append(background);
 
         if (config) {
-          var dataPaths = createDataPaths($svgElement, config);
+          var dataPaths = createDataPaths($svgElement, config, indexOfSvgElement);
           dataPaths.forEach(function(dataPath) {
             $svgElement.append(dataPath);
           });
         }
         
+        indexOfSvgElement++;
       });
     } else {
       console.log('No elements found in selector', this.selector);
@@ -86,17 +88,19 @@
       return (config.data / config.total) * 100;
     }
 
-    function createDataPaths($svg, config) {
+    function createDataPaths($svg, config, index) {
       var paths = [];
       var clockWise = true;
       var percentage = calcPercentage(config);
 
-      var path = document.createElementNS(svgNamespace, 'path');
-      path.setAttribute('class', 'data');
+      if (config.total) {
+        var path = document.createElementNS(svgNamespace, 'path');
+        path.setAttribute('class', 'data');
 
-      var d = calculatePathD($svg, percentage, clockWise, 4);
-      path.setAttribute('d', d);
-      paths.push(path);
+        var d = calculatePathD($svg, percentage, clockWise, 4);
+        path.setAttribute('d', d);
+        paths.push(path);
+      }
 
       return paths;
     }
