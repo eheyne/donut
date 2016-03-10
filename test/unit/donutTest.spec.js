@@ -1,6 +1,6 @@
 var expect = chai.expect;
 
-describe('donut', function() {
+describe('donut plugin features', function() {
   var donut;
   beforeEach(function() {
     $('body').append('<div id="donut"></div>');
