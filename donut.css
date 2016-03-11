@@ -1,6 +1,6 @@
 svg.donut > path {
   fill: none;
-  stroke-width: 4px;
+  stroke-width: 14px;
 }
 
 svg.donut > path.background {

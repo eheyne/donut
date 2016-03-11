@@ -4,8 +4,9 @@ describe('donut plugin features', function() {
   var donut;
   beforeEach(function() {
     $('body').append('<div id="donut"></div>');
-    $('body').append('<div class="donuts"></div>');
-    $('body').append('<div class="donuts"></div>');
+    $('body').append('<div class="donuts" style="width=50px; height=50px"></div>');
+    $('body').append('<div class="donuts" style="width=100px; height=100px"></div>');
+    $('body').append('<div class="donuts" style="width=500px; height=500px"></div>');
     donut = $('#donut').Donut();
   });
 
@@ -55,10 +56,11 @@ describe('donut plugin features', function() {
   });
 
   it('should contain an svg element with the width and height of its parent', function() {
-    var svg = $('#donut').find('svg');
-    var offset = 4;  // don't know why its 4 off.
-    expect(donut.width()).to.equal(svg.width());
-    expect(donut.height()).to.equal(svg.height() + offset);
+    var donuts = $('.donuts').Donut();
+    donuts.each(function(index) {
+      var svg = $(donuts[index]).find('svg');
+      expect($(donuts[index]).width()).to.equal(svg.width());
+    });
   });
 
   it('should create a background ring as a SVG path element', function() {

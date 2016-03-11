@@ -16,16 +16,18 @@
 
       svgElements.each(function(index) {
         var svgElement = svgElements[index];
-        svgElement.setAttribute('width', $this.width());
-        svgElement.setAttribute('height', $this.height());
+        var $svgElement = $(svgElement);
         svgElement.setAttribute('class', 'donut');
 
-        var $svgElement = $(svgElement);
-        var background = backgroundRing($svgElement, 4);
+        var strokeWidth = getSvgPathStrokeWidthAsDefinedInCSS($(svgElement));
+        svgElement.setAttribute('width', $svgElement.parent().width());
+        svgElement.setAttribute('height', $svgElement.parent().height());
+
+        var background = backgroundRing($svgElement, strokeWidth);
         $svgElement.append(background);
 
         if (config) {
-          var dataPaths = createDataPaths($svgElement, config);
+          var dataPaths = createDataPaths($svgElement, config, strokeWidth);
           dataPaths.forEach(function(dataPath) {
             $svgElement.append(dataPath);
           });
@@ -35,6 +37,14 @@
       });
     } else {
       console.log('No elements found in selector', this.selector);
+    }
+
+    function getSvgPathStrokeWidthAsDefinedInCSS($svg) {
+      $svg.append('<path/>');
+      var strokeWidth = $svg.find('path').css('stroke-width').replace(/[^-\d\.]/g, '');
+      $svg.find('path').remove();
+
+      return strokeWidth;
     }
 
     function calculatePathD($svg, startPercentage, endPercentage, clockWise, strokeWidth) {
@@ -106,7 +116,7 @@
       return percentage;
     }
 
-    function createDataPaths($svg, config) {
+    function createDataPaths($svg, config, strokeWidth) {
       var paths = [];
       var clockWise = true;
 
@@ -117,7 +127,7 @@
           var path = document.createElementNS(svgNamespace, 'path');
           path.setAttribute('class', 'data');
 
-          var d = calculatePathD($svg, 0, percentage, clockWise, 4);
+          var d = calculatePathD($svg, 0, percentage, clockWise, strokeWidth);
           path.setAttribute('d', d);
           paths.push(path);
         }
@@ -131,7 +141,7 @@
           path.setAttribute('class', 'data');
 
           var percentage = calcPercentage(config, index, total);
-          var d = calculatePathD($svg, runningTotal, percentage, clockWise, 4);
+          var d = calculatePathD($svg, runningTotal, percentage, clockWise, strokeWidth);
           path.setAttribute('d', d);
           paths.push(path);
           index++;
