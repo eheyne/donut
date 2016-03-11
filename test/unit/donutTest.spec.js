@@ -4,7 +4,7 @@ describe('donut plugin features', function() {
   var donut;
   beforeEach(function() {
     $('body').append('<div id="donut"></div>');
-    $('body').append('<div class="donuts" style="width=50px; height=50px"></div>');
+    $('body').append('<div id="test" class="donuts" style="width=50px; height=50px"></div>');
     $('body').append('<div class="donuts" style="width=100px; height=100px"></div>');
     $('body').append('<div class="donuts" style="width=500px; height=500px"></div>');
     donut = $('#donut').Donut();
@@ -55,11 +55,13 @@ describe('donut plugin features', function() {
     });
   });
 
-  it('should apply an id attribute of donut[X], where X is the index of the svg element', function() {
+  it('should apply an id attribute of [parentId]-donut[X], where X is the index of the svg element', function() {
     var donuts = $('.donuts').Donut();
     donuts.each(function(index) {
+      var parentId = $(donuts[index]).attr('id');
+      var id = parentId ? parentId + '-donut' + index : 'donut' + index;
       var svg = $(donuts[index]).find('svg');
-      expect(svg.attr('id')).to.equal('donut' + index);
+      expect(svg.attr('id')).to.equal(id);
     });
   });
 
