@@ -26,4 +26,10 @@ describe('donut data plotting', function() {
     var data = $('#donut').find('svg > path.data');
     expect(data.length).to.be.equal(0);
   });
+
+  it('should plot a data bar for each data point given', function() {
+    donut = $('#donut').Donut({ data: [25, 25, 25, 25] });
+    var data = $('#donut').find('svg > path.data');
+    expect(data.length).to.be.equal(4);
+  });
 });
