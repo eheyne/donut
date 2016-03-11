@@ -55,6 +55,14 @@ describe('donut plugin features', function() {
     });
   });
 
+  it('should apply an id attribute of donut[X], where X is the index of the svg element', function() {
+    var donuts = $('.donuts').Donut();
+    donuts.each(function(index) {
+      var svg = $(donuts[index]).find('svg');
+      expect(svg.attr('id')).to.equal('donut' + index);
+    });
+  });
+
   it('should contain an svg element with the width and height of its parent', function() {
     var donuts = $('.donuts').Donut();
     donuts.each(function(index) {

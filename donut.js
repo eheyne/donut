@@ -17,6 +17,7 @@
       svgElements.each(function(index) {
         var svgElement = svgElements[index];
         var $svgElement = $(svgElement);
+        svgElement.setAttribute('id', 'donut' + index);
         svgElement.setAttribute('class', 'donut');
 
         var strokeWidth = getSvgPathStrokeWidthAsDefinedInCSS($(svgElement));
