@@ -38,10 +38,10 @@ describe('donut data plotting', function() {
   it('should apply an id attribute of [parentId]-data[X], where X is the index of the svg element, to a single-selection', function() {
     donut = $('#donut').Donut({ total: 100, data: 50 });
     var paths = $('#donut').find('svg > path.data');
-    var svgId = $('#donut').find('svg').attr('id');
+    var parentId = $('#donut').attr('id');
     expect(paths.length).to.be.equal(1);
     paths.each(function(index) {
-      var pathId = svgId + '-data0';
+      var pathId = parentId + '-data0';
       expect($(paths[index]).attr('id')).to.be.equal(pathId);
     });
   });
@@ -56,7 +56,7 @@ describe('donut data plotting', function() {
 
       var paths = $(donuts[svgIndex]).find('svg > path.data');
       paths.each(function(index) {
-        var pathId = svgId + '-data' + index;
+        var pathId = parentId + '-data' + index;
         expect($(paths[index]).attr('id')).to.be.equal(pathId);
       });
     });
