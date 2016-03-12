@@ -130,6 +130,7 @@
 
           var path = document.createElementNS(svgNamespace, 'path');
           path.setAttribute('class', 'data');
+          path.setAttribute('id', $svg.attr('id') + '-data0');
 
           var d = calculatePathD($svg, 0, percentage, clockWise, strokeWidth);
           path.setAttribute('d', d);
@@ -143,6 +144,7 @@
         config.data.forEach(function(dataPoint) {
           var path = document.createElementNS(svgNamespace, 'path');
           path.setAttribute('class', 'data');
+          path.setAttribute('id', $svg.attr('id') + '-data' + index);
 
           var percentage = calcPercentage(config, index, total);
           var d = calculatePathD($svg, runningTotal, percentage, clockWise, strokeWidth);

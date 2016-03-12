@@ -14,6 +14,8 @@ describe('donut plugin features', function() {
     if (donut) {
       donut.empty();
     }
+    $('body').remove('div#donut');
+    $('body').remove('div.donuts');
   });
 
   it('should handle if no elements selected', function() {
