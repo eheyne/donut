@@ -7,6 +7,8 @@
 }(function($) {
   var Donut = function(config) {
     var svgNamespace = 'http://www.w3.org/2000/svg';
+    var donutBaseClassName = 'donut';
+    var donutPathBaseClassName = donutBaseClassName + '-data';
     var $this = $(this);
 
     if ($this.length > 0) {
@@ -21,7 +23,7 @@
         var id = parentId ? parentId + '-donut' + index : 'donut' + index;
 
         svgElement.setAttribute('id', id);
-        svgElement.setAttribute('class', 'donut');
+        svgElement.setAttribute('class', donutBaseClassName);
 
         var strokeWidth = getSvgPathStrokeWidthAsDefinedInCSS($(svgElement));
         svgElement.setAttribute('width', $svgElement.parent().width());
@@ -129,8 +131,8 @@
           var percentage = calcPercentage(config);
 
           var path = document.createElementNS(svgNamespace, 'path');
-          path.setAttribute('class', 'data');
-          path.setAttribute('id', $svg.parent().attr('id') + '-data0');
+          var pathClass = donutPathBaseClassName + '0';
+          path.setAttribute('class', donutPathBaseClassName + ' ' + pathClass);
 
           var d = calculatePathD($svg, 0, percentage, clockWise, strokeWidth);
           path.setAttribute('d', d);
@@ -143,8 +145,9 @@
         
         config.data.forEach(function(dataPoint) {
           var path = document.createElementNS(svgNamespace, 'path');
-          path.setAttribute('class', 'data');
-          path.setAttribute('id', $svg.parent().attr('id') + '-data' + index);
+
+          var pathClass = donutPathBaseClassName + index;
+          path.setAttribute('class', donutPathBaseClassName + ' ' + pathClass);
 
           var percentage = calcPercentage(config, index, total);
           var d = calculatePathD($svg, runningTotal, percentage, clockWise, strokeWidth);
