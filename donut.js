@@ -110,13 +110,17 @@
       return sum;
     }
 
-    function calcPercentage(config, index, total) {
+    function calcPercentage(data, total) {
+      return (data / total) * 100;
+    }
+
+    function calcDataPointPercentage(config, index, total) {
       var percentage;
 
       if (typeof config.data === 'number') {
-        percentage = (config.data / config.total) * 100;
+        percentage = calcPercentage(config.data, config.total);
       } else {
-        percentage = (config.data[index] / total) * 100; 
+        percentage = calcPercentage(config.data[index], total); 
       }
 
       return percentage;
@@ -128,7 +132,7 @@
 
       if (typeof config.data === 'number') {
         if (config.total) {
-          var percentage = calcPercentage(config);
+          var percentage = calcDataPointPercentage(config);
 
           var path = document.createElementNS(svgNamespace, 'path');
           var pathClass = donutPathBaseClassName + '0';
@@ -139,7 +143,7 @@
           paths.push(path);
         }
       } else {
-        var total = sumArray(config.data);
+        var total = config.total ? config.total : sumArray(config.data);
         var runningTotal = 0;
         var index = 0;
         
@@ -149,12 +153,12 @@
           var pathClass = donutPathBaseClassName + index;
           path.setAttribute('class', donutPathBaseClassName + ' ' + pathClass);
 
-          var percentage = calcPercentage(config, index, total);
+          var percentage = calcDataPointPercentage(config, index, total);
           var d = calculatePathD($svg, runningTotal, percentage, clockWise, strokeWidth);
           path.setAttribute('d', d);
           paths.push(path);
           index++;
-          runningTotal += dataPoint;
+          runningTotal += calcPercentage(dataPoint, total);
         });
       }
 
