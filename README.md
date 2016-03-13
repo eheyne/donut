@@ -17,3 +17,39 @@ To run jshint: `npm run lint`
 
 To clean the .tmp folder: `npm run clean`
 
+## How to use
+In your HTML define the elements that you would like to take on the donut behavior.
+
+Examples:
+
+```html
+<div id="test" class="donuts" style="width: 50px; height: 50px"></div>
+<div class="donuts" style="width: 100px; height: 100px"></div>
+<div class="donuts" style="width: 500px; height: 500px"></div>
+
+```
+
+In JavaScript call the `Donut` plugin on the selector of your choice.
+
+Examples:
+
+``` javascript
+var donuts = $('.donuts').donut({ total: 125, data: 25 });
+
+```
+
+or
+
+```javascript
+var donuts = $('.donuts').donut({ data: [25, 25, 25, 25] });
+
+```
+
+or
+
+```javascript
+var donuts = $('.donuts').donut({ total: 125, data: [25, 25, 25, 25] });
+
+```
+
+note: The examples above show 3 different forms of data that can be passed into the Donut plugin.
