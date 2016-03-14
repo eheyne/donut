@@ -11,6 +11,8 @@ All commands are run using npm commands.  The following commands are available:
 
 To run the tests:  `npm test`
 
+To run the tests continuously as you make changes: `npm run keepalivetest
+
 To serve a demo page: `npm run serve`
 
 To run jshint: `npm run lint`
@@ -53,3 +55,17 @@ var donuts = $('.donuts').donut({ total: 125, data: [25, 25, 25, 25] });
 ```
 
 note: The examples above show 3 different forms of data that can be passed into the Donut plugin.
+
+## Options
+The following options are available:
+
+* hover - Specify the mouseEnter and mouseLeave event handlers
+
+Possible hover configuration options:
+
+``` javascript
+var donuts = $('.donuts').Donut({ total: 125, data: [25, 25, 25, 25], hover: mouseEnter });
+var donuts = $('.donuts').Donut({ total: 125, data: [25, 25, 25, 25], hover: [mouseEnter] });
+var donuts = $('.donuts').Donut({ total: 125, data: [25, 25, 25, 25], hover: [undefined, mouseLeave] });
+var donuts = $('.donuts').Donut({ total: 125, data: [25, 25, 25, 25], hover: [mouseEnter, mouseLeave] });
+```

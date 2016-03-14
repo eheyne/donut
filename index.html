@@ -11,7 +11,9 @@
     <div class="donuts" style="width: 100px; height: 100px"></div>
     <div class="donuts" style="width: 500px; height: 500px"></div>
     <script>
-      var donuts = $('.donuts').Donut({ total: 125, data: [25, 25, 25, 25] });
+      function mouseEnter() { console.log("Enter SVG element"); }
+      function mouseLeave() { console.log("Leaving SVG element"); }
+      var donuts = $('.donuts').Donut({ total: 125, data: [25, 25, 25, 25], hover: [mouseEnter, mouseLeave] });
     </script>
   </body>
 </html>

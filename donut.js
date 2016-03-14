@@ -25,6 +25,8 @@
         svgElement.setAttribute('id', id);
         svgElement.setAttribute('class', donutBaseClassName);
 
+        registerHoverEvent($svgElement, config);
+
         var strokeWidth = getSvgPathStrokeWidthAsDefinedInCSS($(svgElement));
         svgElement.setAttribute('width', $svgElement.parent().width());
         svgElement.setAttribute('height', $svgElement.parent().height());
@@ -43,6 +45,16 @@
       });
     } else {
       console.log('No elements found in selector', this.selector);
+    }
+
+    function registerHoverEvent($svgElement, config) {
+      if (config && config.hover) {
+        if (typeof config.hover === 'function') {
+          $svgElement.hover(config.hover);
+        } else if (config.hover.length > 0) { // Assuming array if not a single function.
+          $svgElement.hover(config.hover[0], config.hover[1]);
+        }
+      }
     }
 
     function getSvgPathStrokeWidthAsDefinedInCSS($svg) {
