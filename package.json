@@ -24,7 +24,8 @@
     "copy": "cp index.html .tmp && cp donut.* .tmp",
     "copyJquery": "cp ./node_modules/jquery/dist/jquery.js .tmp",
     "serve": "npm run lint && npm run clean && npm run copyJquery && npm run copy && node ./tasks/server.js ../.tmp",
-    "test": "./node_modules/karma/bin/karma start",
+    "test": "./node_modules/karma/bin/karma start --single-run --browsers PhantomJS",
+    "keepalivetest": "./node_modules/karma/bin/karma start",
     "pretest": "npm run lint"
   },
   "keywords": [],

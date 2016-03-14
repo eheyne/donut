@@ -1,4 +1,4 @@
-#  donut
+#  donut [![Build Status](https://travis-ci.org/eheyne/donut.svg?branch=master)](https://travis-ci.org/eheyne/donut)
 
 ## Overview
 This repo contains a way to show data in a donut type graph.
