@@ -59,6 +59,17 @@ note: The examples above show 3 different forms of data that can be passed into 
 ## Options
 The following options are available:
 
+* click - Specify a click event handler
+
+Possible click configuration options:
+
+``` javascript
+function clickEventHandler() { 
+  console.log("SVG element " + event.target.getAttribute('id') + " clicked!"); }
+
+var donuts = $('.donuts').Donut({ total: 125, data: [25, 25, 25, 25], click: clickEventHandler });
+```
+
 * hover - Specify the mouseEnter and mouseLeave event handlers
 
 Possible hover configuration options:
@@ -69,3 +80,18 @@ var donuts = $('.donuts').Donut({ total: 125, data: [25, 25, 25, 25], hover: [mo
 var donuts = $('.donuts').Donut({ total: 125, data: [25, 25, 25, 25], hover: [undefined, mouseLeave] });
 var donuts = $('.donuts').Donut({ total: 125, data: [25, 25, 25, 25], hover: [mouseEnter, mouseLeave] });
 ```
+
+* animate - slowly draw the paths from start to finish, with the ability to control speed of draw
+
+Possible animate configuration options:
+
+``` javascript
+var donuts = $('.donuts').Donut({ total: 125, data: [25, 25, 25, 25], animate: true }); // default to 1s animation
+```
+
+or to control the length of the animation (5 seconds)
+
+``` javascript
+var donuts = $('.donuts').Donut({ total: 125, data: [25, 25, 25, 25], animate: '5s' });
+```
+

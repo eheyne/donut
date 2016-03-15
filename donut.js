@@ -39,6 +39,7 @@
           var dataPaths = createDataPaths($svgElement, config, strokeWidth);
           dataPaths.forEach(function(dataPath) {
             $svgElement.append(dataPath);
+            animate(dataPath, config);
           });
         }
         
@@ -188,6 +189,25 @@
       }
 
       return paths;
+    }
+
+    function animate(path, config) {
+      if (config && config.animate) {
+        var length = path.getTotalLength();
+        var time = '1s';
+        var to = 0;
+
+        if (typeof config.animate === 'string') {
+          time = config.animate;
+        }
+
+        path.style.transition = path.style.WebkitTransition = 'none';
+        path.style.strokeDasharray = length + ' ' + length;
+        path.style.strokeDashoffset = length;
+        path.getBoundingClientRect();
+        path.style.transition = path.style.WebkitTransition = 'stroke-dashoffset ' + time + ' ease-in-out';
+        path.style.strokeDashoffset = to;
+      }
     }
 
     return this;
