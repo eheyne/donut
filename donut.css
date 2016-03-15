@@ -15,6 +15,23 @@ svg.donut > path.background {
   stroke: #EFEFEF;
 }
 
+svg.donut > text.donut-text {
+  text-anchor: middle;
+  fill: darkgray;
+}
+
+svg#test-donut0 > text.donut-text {
+  font-size: 6px;
+}
+
+svg#donut1 > text.donut-text {
+  font-size: 16px;
+}
+
+svg#donut2 > text.donut-text {
+  font-size: 46px;
+}
+
 svg.donut > path.donut-data0 {
   stroke: #ED1B24;
 }

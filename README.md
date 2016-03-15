@@ -95,3 +95,8 @@ or to control the length of the animation (5 seconds)
 var donuts = $('.donuts').Donut({ total: 125, data: [25, 25, 25, 25], animate: '5s' });
 ```
 
+* text - creates an SVG text element with the text `value of total`
+
+``` javascript
+var donuts = $('.donuts').Donut({ total: 125, data: [25, 25, 25, 25], text: true });
+```

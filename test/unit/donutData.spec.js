@@ -62,4 +62,40 @@ describe('donut data plotting', function() {
       });
     });
   });
+
+  it('should not create an SVG text element when the text property is not present', function() {
+    var donuts = $('.donuts').Donut({ data: [25, 25, 25, 25] });
+    expect($(donuts).length).to.be.equal(2);
+    donuts.each(function(svgIndex) {
+      var text = $(donuts[svgIndex]).find('svg > text');
+      expect(text.length).to.be.equal(0);
+    });
+  });
+
+  it('should not create an SVG text element when the text property is undefined', function() {
+    var donuts = $('.donuts').Donut({ data: [25, 25, 25, 25], text: undefined });
+    expect($(donuts).length).to.be.equal(2);
+    donuts.each(function(svgIndex) {
+      var text = $(donuts[svgIndex]).find('svg > text');
+      expect(text.length).to.be.equal(0);
+    });
+  });
+
+  it('should not create an SVG text element when the text property is false', function() {
+    var donuts = $('.donuts').Donut({ data: [25, 25, 25, 25], text: false });
+    expect($(donuts).length).to.be.equal(2);
+    donuts.each(function(svgIndex) {
+      var text = $(donuts[svgIndex]).find('svg > text');
+      expect(text.length).to.be.equal(0);
+    });
+  });
+
+  it('should create an SVG text element when the text property is true', function() {
+    var donuts = $('.donuts').Donut({ data: [25, 25, 25, 25], text: true });
+    expect($(donuts).length).to.be.equal(2);
+    donuts.each(function(svgIndex) {
+      var text = $(donuts[svgIndex]).find('svg > text');
+      expect(text.length).to.be.equal(1);
+    });
+  });
 });

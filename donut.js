@@ -41,6 +41,11 @@
             $svgElement.append(dataPath);
             animate(dataPath, config);
           });
+
+          var svgText = createText($svgElement, config);
+          if (svgText) {
+            $svgElement.append(svgText);
+          }
         }
         
         indexOfSvgElement++;
@@ -66,7 +71,7 @@
         } else if (config.hover.length > 0) { // Assuming array if not a single function.
           $svgElement.hover(config.hover[0], config.hover[1]);
         } else {
-          console.log('Not a valid valud for the hover property');
+          console.log('Not a valid value for the hover property');
         }
       }
     }
@@ -208,6 +213,29 @@
         path.style.transition = path.style.WebkitTransition = 'stroke-dashoffset ' + time + ' ease-in-out';
         path.style.strokeDashoffset = to;
       }
+    }
+
+    function createText($svgElement, config) {
+      var textRemaining;
+
+      if (config && config.text) {
+        textRemaining = document.createElementNS(svgNamespace, 'text');
+        textRemaining.setAttribute('class', 'donut-text');
+        textRemaining.setAttribute('x', $svgElement.parent().width()/2);
+        textRemaining.setAttribute('y', $svgElement.parent().height()/2 - 5);
+
+        var value;
+        if (config.data === 'number') {
+          value = config.data;
+        } else {
+          value = sumArray(config.data);
+        }
+
+        var total = config.total ? config.total : sumArray(config.data);
+        textRemaining.textContent = value + ' of ' + total;
+      }
+
+      return textRemaining;
     }
 
     return this;
