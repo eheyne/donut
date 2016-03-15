@@ -2,11 +2,13 @@ var expect = chai.expect;
 
 describe('donut event handling', function() {
   var donut;
+  var clickHandled;
   var hoverHandled;
   var hoverLeaveHandled;
 
   beforeEach(function() {
     $('body').append('<div id="donut"></div>');
+    clickHandled = false;
     hoverHandled = false;
     hoverLeavehandled = false;
   });
@@ -16,9 +18,14 @@ describe('donut event handling', function() {
       donut.empty();
     }
     $('div#donut').remove();
+    clickHandled = undefined;
     hoverHandled = undefined;
     hoverLeavehandled = undefined;
   });
+
+  function onClickFunc(event) {
+    clickHandled = true;
+  };
 
   function onHoverFunc(event) {
     hoverHandled = true;
@@ -27,6 +34,28 @@ describe('donut event handling', function() {
   function onHoverLeaveFunc(event) {
     hoverLeaveHandled = true;
   };
+
+  it('should handle the click event when click property passed to it', function(done) {
+    donut = $('#donut').Donut({ total: 100, data: 50, click: onClickFunc });
+    var svg = $('#donut').find('svg');
+    svg.trigger('click');
+
+    setTimeout(function() {
+      expect(clickHandled).to.be.equal(true);
+      done();
+    }, 100);
+  });
+
+  it('should handle the click event when invalid click property passed to it', function(done) {
+    donut = $('#donut').Donut({ total: 100, data: 50, click: undefined });
+    var svg = $('#donut').find('svg');
+    svg.trigger('click');
+
+    setTimeout(function() {
+      expect(clickHandled).to.be.equal(false);
+      done();
+    }, 100);
+  });
 
   it('should handle the hover property as an empty array', function(done) {
     donut = $('#donut').Donut({ total: 100, data: 50, hover: [] });

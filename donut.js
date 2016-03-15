@@ -25,6 +25,7 @@
         svgElement.setAttribute('id', id);
         svgElement.setAttribute('class', donutBaseClassName);
 
+        registerClickEvent($svgElement, config);
         registerHoverEvent($svgElement, config);
 
         var strokeWidth = getSvgPathStrokeWidthAsDefinedInCSS($(svgElement));
@@ -47,12 +48,24 @@
       console.log('No elements found in selector', this.selector);
     }
 
+    function registerClickEvent($svgElement, config) {
+      if (config && config.click) {
+        if (typeof config.click === 'function') {
+          $svgElement.click(config.click);
+        } else {
+          console.log('Not a valid value for the click property');
+        }
+      }
+    }
+
     function registerHoverEvent($svgElement, config) {
       if (config && config.hover) {
         if (typeof config.hover === 'function') {
           $svgElement.hover(config.hover);
         } else if (config.hover.length > 0) { // Assuming array if not a single function.
           $svgElement.hover(config.hover[0], config.hover[1]);
+        } else {
+          console.log('Not a valid valud for the hover property');
         }
       }
     }
