@@ -98,4 +98,67 @@ describe('donut data plotting', function() {
       expect(text.length).to.be.equal(1);
     });
   });
+
+  it('should not add a threshold class when threshold is not given', function() {
+    var donuts = $('.donuts').Donut({ total: 100, data: 25 });
+    expect($(donuts).length).to.be.equal(2);
+    donuts.each(function(svgIndex) {
+      var paths = $(donuts[svgIndex]).find('svg > path.donut-data');
+      expect(paths.length).to.be.equal(1);
+      paths.each(function(index) {
+        var classes = $(paths[index]).attr('class');
+        expect(classes).to.not.be.empty;
+        expect(classes).to.not.include('above-threshold');
+        expect(classes).to.not.include('below-threshold');
+      });
+    });
+  });
+
+  it('should add class above-threshold when the threshold is given, to a single path when only one data point and it is above threshold', function() {
+    var donuts = $('.donuts').Donut({ total: 100, data: 25, threshold: 20 });
+    expect($(donuts).length).to.be.equal(2);
+    donuts.each(function(svgIndex) {
+      var paths = $(donuts[svgIndex]).find('svg > path.donut-data');
+      expect(paths.length).to.be.equal(1);
+      paths.each(function(index) {
+        expect($(paths[index]).attr('class')).to.include('above-threshold');
+      });
+    });
+  });
+
+  it('should add class above-threshold to all paths when it is above threshold', function() {
+    var donuts = $('.donuts').Donut({ data: [25, 25, 25, 25], threshold: 20 });
+    expect($(donuts).length).to.be.equal(2);
+    donuts.each(function(svgIndex) {
+      var paths = $(donuts[svgIndex]).find('svg > path.donut-data');
+      expect(paths.length).to.be.equal(4);
+      paths.each(function(index) {
+        expect($(paths[index]).attr('class')).to.include('above-threshold');
+      });
+    });
+  });
+
+  it('should add class below-threshold when the threshold is given and the data point is below threshold', function() {
+    var donuts = $('.donuts').Donut({ total: 100, data: 25, threshold: 30});
+    expect($(donuts).length).to.be.equal(2);
+    donuts.each(function(svgIndex) {
+      var paths = $(donuts[svgIndex]).find('svg > path.donut-data');
+      expect(paths.length).to.be.equal(1);
+      paths.each(function(index) {
+        expect($(paths[index]).attr('class')).to.include('below-threshold');
+      });
+    });
+  });
+
+  it('should add class below-threshold to all paths when it is below threshold', function() {
+    var donuts = $('.donuts').Donut({ data: [25, 25, 25, 25], threshold: 30});
+    expect($(donuts).length).to.be.equal(2);
+    donuts.each(function(svgIndex) {
+      var paths = $(donuts[svgIndex]).find('svg > path.donut-data');
+      expect(paths.length).to.be.equal(4);
+      paths.each(function(index) {
+        expect($(paths[index]).attr('class')).to.include('below-threshold');
+      });
+    });
+  });
 });

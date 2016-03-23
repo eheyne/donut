@@ -15,7 +15,7 @@
         console.log("SVG element " + event.target.getAttribute('id') + " clicked!"); }
       function mouseEnter() { console.log("Enter SVG element"); }
       function mouseLeave() { console.log("Leaving SVG element"); }
-      var donuts = $('.donuts').Donut({ total: 125, data: [25, 25, 25, 25], click: click, hover: [mouseEnter, mouseLeave], animate: true, text: true });
+      var donuts = $('.donuts').Donut({ total: 125, data: [25, 25, 25, 25], click: click, hover: [mouseEnter, mouseLeave], animate: true, text: true, threshold: 30 });
     </script>
   </body>
 </html>

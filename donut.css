@@ -47,3 +47,7 @@ svg.donut > path.donut-data2 {
 svg.donut > path.donut-data3 {
   stroke: #5701AE;
 }
+
+svg.donut > path.donut-data3.above-threshold {
+  stroke: #06B800;
+}

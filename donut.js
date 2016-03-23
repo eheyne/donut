@@ -167,7 +167,15 @@
 
           var path = document.createElementNS(svgNamespace, 'path');
           var pathClass = donutPathBaseClassName + '0';
-          path.setAttribute('class', donutPathBaseClassName + ' ' + pathClass);
+          if (config.threshold) {
+            if (config.data > config.threshold) {
+              path.setAttribute('class', donutPathBaseClassName + ' ' + pathClass + ' above-threshold');
+            } else {
+              path.setAttribute('class', donutPathBaseClassName + ' ' + pathClass + ' below-threshold');
+            }
+          } else {
+            path.setAttribute('class', donutPathBaseClassName + ' ' + pathClass);
+          }
 
           var d = calculatePathD($svg, 0, percentage, clockWise, strokeWidth);
           path.setAttribute('d', d);
@@ -182,7 +190,15 @@
           var path = document.createElementNS(svgNamespace, 'path');
 
           var pathClass = donutPathBaseClassName + index;
-          path.setAttribute('class', donutPathBaseClassName + ' ' + pathClass);
+          if (config.threshold) {
+            if (dataPoint > config.threshold) {
+              path.setAttribute('class', donutPathBaseClassName + ' ' + pathClass + ' above-threshold');
+            } else {
+              path.setAttribute('class', donutPathBaseClassName + ' ' + pathClass + ' below-threshold');
+            }
+          } else {
+            path.setAttribute('class', donutPathBaseClassName + ' ' + pathClass);
+          }
 
           var percentage = calcDataPointPercentage(config, index, total);
           var d = calculatePathD($svg, runningTotal, percentage, clockWise, strokeWidth);
