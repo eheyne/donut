@@ -227,6 +227,7 @@
         path.style.strokeDashoffset = length;
         path.getBoundingClientRect();
         path.style.transition = path.style.WebkitTransition = 'stroke-dashoffset ' + time + ' ease-in-out';
+        path.style.transition = path.style.WebkitTransition = 'stroke 1s ease';
         path.style.strokeDashoffset = to;
       }
     }
