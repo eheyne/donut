@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
+    "body-parser": "^1.15.0",
     "jquery": "^2.2.0"
   },
   "devDependencies": {
