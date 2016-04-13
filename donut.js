@@ -14,7 +14,6 @@
     if ($this.length > 0) {
       $this.append('<svg />');
       var svgElements = $this.find('svg');
-      var indexOfSvgElement = 0;
 
       svgElements.each(function(index) {
         var svgElement = svgElements[index];
@@ -36,19 +35,18 @@
         $svgElement.append(background);
 
         if (config) {
-          var dataPaths = createDataPaths($svgElement, config, strokeWidth);
-          dataPaths.forEach(function(dataPath) {
-            $svgElement.append(dataPath);
-            animate(dataPath, config);
-          });
+          createDataPaths($svgElement, config, strokeWidth, function(dataPaths) {
+            dataPaths.forEach(function(dataPath) {
+              $svgElement.append(dataPath);
+              animate(dataPath, config);
+            });
 
-          var svgText = createText($svgElement, config);
-          if (svgText) {
-            $svgElement.append(svgText);
-          }
+            var svgText = createText($svgElement, config);
+            if (svgText) {
+              $svgElement.append(svgText);
+            }
+          });
         }
-        
-        indexOfSvgElement++;
       });
     } else {
       console.log('No elements found in selector', this.selector);
@@ -84,7 +82,8 @@
       return strokeWidth;
     }
 
-    function calculatePathD($svg, startPercentage, endPercentage, clockWise, strokeWidth) {
+    function calculatePathD($svg, startPercentage, endPercentage, strokeWidth) {
+      var clockWise = true;
       var size = Math.min($svg.height(), $svg.width());
       var centerX = $svg.width() / 2;
       var centerY = size / 2;
@@ -121,13 +120,12 @@
     }
 
     function backgroundRing($svg, strokeWidth) {
-      var clockWise = true;
       var percentage = 100;
 
       var path = document.createElementNS(svgNamespace, 'path');
       path.setAttribute('class', 'background');
 
-      var d = calculatePathD($svg, 0, percentage, clockWise, strokeWidth);
+      var d = calculatePathD($svg, 0, percentage, strokeWidth);
       path.setAttribute('d', d);
       return path;
     }
@@ -157,58 +155,61 @@
       return percentage;
     }
 
-    function createDataPaths($svg, config, strokeWidth) {
+    function assignClassAttribute(path, dataPoint, config, index) {
+      index = index || 0;
+      var pathClass = donutPathBaseClassName + index;
+      if (config.threshold) {
+        if (dataPoint > config.threshold) {
+          path.setAttribute('class', donutPathBaseClassName + ' ' + pathClass + ' above-threshold');
+        } else {
+          path.setAttribute('class', donutPathBaseClassName + ' ' + pathClass + ' below-threshold');
+        }
+      } else {
+        path.setAttribute('class', donutPathBaseClassName + ' ' + pathClass);
+      }
+    }
+
+    function handleDataArray($svg, paths, config, strokeWidth) {
+      var total = config.total ? config.total : sumArray(config.data);
+      var runningTotal = 0;
+      var index = 0;
+      
+      config.data.forEach(function(dataPoint) {
+        var path = document.createElementNS(svgNamespace, 'path');
+        assignClassAttribute(path, dataPoint, config, index);
+        var percentage = calcDataPointPercentage(config, index, total);
+        var d = calculatePathD($svg, runningTotal, percentage, strokeWidth);
+        path.setAttribute('d', d);
+        paths.push(path);
+
+        index++;
+        runningTotal += calcPercentage(dataPoint, total);
+      });
+    }
+
+    function createDataPaths($svg, config, strokeWidth, callback) {
       var paths = [];
-      var clockWise = true;
 
       if (typeof config.data === 'number') {
         if (config.total) {
-          var percentage = calcDataPointPercentage(config);
-
           var path = document.createElementNS(svgNamespace, 'path');
-          var pathClass = donutPathBaseClassName + '0';
-          if (config.threshold) {
-            if (config.data > config.threshold) {
-              path.setAttribute('class', donutPathBaseClassName + ' ' + pathClass + ' above-threshold');
-            } else {
-              path.setAttribute('class', donutPathBaseClassName + ' ' + pathClass + ' below-threshold');
-            }
-          } else {
-            path.setAttribute('class', donutPathBaseClassName + ' ' + pathClass);
-          }
-
-          var d = calculatePathD($svg, 0, percentage, clockWise, strokeWidth);
+          assignClassAttribute(path, config.data, config);
+          var percentage = calcDataPointPercentage(config);
+          var d = calculatePathD($svg, 0, percentage, strokeWidth);
           path.setAttribute('d', d);
           paths.push(path);
         }
+      } else if (typeof config.data === 'object') {
+        if (Array.isArray(config.data)) {
+          handleDataArray($svg, paths, config, strokeWidth);
+        } else {
+
+        }
       } else {
-        var total = config.total ? config.total : sumArray(config.data);
-        var runningTotal = 0;
-        var index = 0;
-        
-        config.data.forEach(function(dataPoint) {
-          var path = document.createElementNS(svgNamespace, 'path');
-
-          var pathClass = donutPathBaseClassName + index;
-          if (config.threshold) {
-            if (dataPoint > config.threshold) {
-              path.setAttribute('class', donutPathBaseClassName + ' ' + pathClass + ' above-threshold');
-            } else {
-              path.setAttribute('class', donutPathBaseClassName + ' ' + pathClass + ' below-threshold');
-            }
-          } else {
-            path.setAttribute('class', donutPathBaseClassName + ' ' + pathClass);
-          }
-
-          var percentage = calcDataPointPercentage(config, index, total);
-          var d = calculatePathD($svg, runningTotal, percentage, clockWise, strokeWidth);
-          path.setAttribute('d', d);
-          paths.push(path);
-          index++;
-          runningTotal += calcPercentage(dataPoint, total);
-        });
+        console.log('type not recognized');
       }
 
+      callback(paths);
       return paths;
     }
 
