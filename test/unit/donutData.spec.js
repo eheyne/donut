@@ -1,5 +1,11 @@
 var expect = chai.expect;
 
+if ($.hasOwnProperty('mockjaxSettings')) {
+  $.mockjaxSettings.contentType = 'application/json';
+  $.mockjaxSettings.logging = false;
+  $.mockjaxSettings.responseTime = 1;
+}
+
 describe('donut data plotting', function() {
   var donut;
   beforeEach(function() {
@@ -29,10 +35,25 @@ describe('donut data plotting', function() {
     expect(data.length).to.be.equal(0);
   });
 
-  it('should plot a data bar for each data point given', function() {
+  it('should plot a data bar for each data point given', function(done) {
     donut = $('#donut').Donut({ data: [25, 25, 25, 25] });
     var data = $('#donut').find('svg > path.donut-data');
+    done();
     expect(data.length).to.be.equal(4);
+  });
+
+  it('should handle data as an object containing url', function(done) {
+    var testUrl = '*/some/endpoint';
+    $.mockjax({
+      url: testUrl,
+      type: 'GET',
+      responseText: JSON.stringify([25, 25, 25, 25])
+    });
+    donut = $('#donut').Donut({ data: { url: testUrl } });
+    var data = $('#donut').find('svg > path.donut-data');
+    done();
+    expect(data.length).to.be.equal(4);
+    $.mockjaxClear();
   });
 
   it('should apply a class attribute of donut-data[X], where X is the index of the svg element, to a single-selection', function() {

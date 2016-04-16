@@ -57,8 +57,9 @@ describe('donut plugin features', function() {
     });
   });
 
-  it('should apply an id attribute of [parentId]-donut[X], where X is the index of the svg element', function() {
+  it('should apply an id attribute of [parentId]-donut[X], where X is the index of the svg element', function(done) {
     var donuts = $('.donuts').Donut();
+    done();
     donuts.each(function(index) {
       var parentId = $(donuts[index]).attr('id');
       var id = parentId ? parentId + '-donut' + index : 'donut' + index;
@@ -75,8 +76,9 @@ describe('donut plugin features', function() {
     });
   });
 
-  it('should create a background ring as a SVG path element', function() {
+  it('should create a background ring as a SVG path element', function(done) {
     var background = $('#donut').find('svg > path.background');
+    done();
     expect(background.length).to.be.above(0);
     expect(background[0].tagName).to.equal('path');
   });

@@ -15,6 +15,41 @@
       $this.append('<svg />');
       var svgElements = $this.find('svg');
 
+      var data = initiateSvgRender(svgElements, config, svgRender);
+
+    } else {
+      console.log('No elements found in selector', this.selector);
+    }
+
+    function callApiEndPoint(svgElement, config, svgRenderCallback) {
+      if (config.data.url !== undefined) {
+        // setTimeout(function() {
+          $.get(config.data.url).done(function(response) {
+            if (typeof(response) !== 'undefined' && response.length > 0) {
+              svgRenderCallback(svgElements, config, response);
+            }
+          });
+        // }, 500);
+      }
+    }
+
+    function initiateSvgRender(svgElements, config, svgRenderCallback) {
+      if (config !== undefined && svgRenderCallback !== undefined) {
+        if (typeof config.data === 'number') {
+          svgRenderCallback(svgElements, config, config.data);
+        } else if (typeof config.data === 'object') {
+          if (Array.isArray(config.data)) {
+            svgRenderCallback(svgElements, config, config.data);
+          } else {
+            callApiEndPoint(svgElements, config, svgRenderCallback);
+          }
+        } else {
+          console.log('config type not valid');
+        }
+      }
+    }
+
+    function svgRender(svgElements, config, data) {
       svgElements.each(function(index) {
         var svgElement = svgElements[index];
         var $svgElement = $(svgElement);
@@ -35,21 +70,18 @@
         $svgElement.append(background);
 
         if (config) {
-          createDataPaths($svgElement, config, strokeWidth, function(dataPaths) {
-            dataPaths.forEach(function(dataPath) {
-              $svgElement.append(dataPath);
-              animate(dataPath, config);
-            });
-
-            var svgText = createText($svgElement, config);
-            if (svgText) {
-              $svgElement.append(svgText);
-            }
+          var dataPaths = createDataPaths($svgElement, config, data, strokeWidth);
+          dataPaths.forEach(function(dataPath) {
+            $svgElement.append(dataPath);
+            animate(dataPath, config);
           });
+
+          var svgText = createText($svgElement, config, data);
+          if (svgText) {
+            $svgElement.append(svgText);
+          }
         }
       });
-    } else {
-      console.log('No elements found in selector', this.selector);
     }
 
     function registerClickEvent($svgElement, config) {
@@ -143,23 +175,23 @@
       return (data / total) * 100;
     }
 
-    function calcDataPointPercentage(config, index, total) {
+    function calcDataPointPercentage(data, total, index) {
       var percentage;
 
-      if (typeof config.data === 'number') {
-        percentage = calcPercentage(config.data, config.total);
+      if (typeof data === 'number') {
+        percentage = calcPercentage(data, config.total);
       } else {
-        percentage = calcPercentage(config.data[index], total); 
+        percentage = calcPercentage(data[index], total); 
       }
 
       return percentage;
     }
 
-    function assignClassAttribute(path, dataPoint, config, index) {
+    function assignClassAttribute(path, dataPoint, threshold, index) {
       index = index || 0;
       var pathClass = donutPathBaseClassName + index;
-      if (config.threshold) {
-        if (dataPoint > config.threshold) {
+      if (threshold) {
+        if (dataPoint > threshold) {
           path.setAttribute('class', donutPathBaseClassName + ' ' + pathClass + ' above-threshold');
         } else {
           path.setAttribute('class', donutPathBaseClassName + ' ' + pathClass + ' below-threshold');
@@ -169,15 +201,15 @@
       }
     }
 
-    function handleDataArray($svg, paths, config, strokeWidth) {
-      var total = config.total ? config.total : sumArray(config.data);
+    function handleDataArray($svg, paths, config, data, strokeWidth) {
+      var total = config.total ? config.total : sumArray(data);
       var runningTotal = 0;
       var index = 0;
       
-      config.data.forEach(function(dataPoint) {
+      data.forEach(function(dataPoint) {
         var path = document.createElementNS(svgNamespace, 'path');
-        assignClassAttribute(path, dataPoint, config, index);
-        var percentage = calcDataPointPercentage(config, index, total);
+        assignClassAttribute(path, dataPoint, config.threshold, index);
+        var percentage = calcDataPointPercentage(data, total, index);
         var d = calculatePathD($svg, runningTotal, percentage, strokeWidth);
         path.setAttribute('d', d);
         paths.push(path);
@@ -187,29 +219,28 @@
       });
     }
 
-    function createDataPaths($svg, config, strokeWidth, callback) {
+    function createDataPaths($svg, config, data, strokeWidth) {
       var paths = [];
 
-      if (typeof config.data === 'number') {
+      if (typeof data === 'number') {
         if (config.total) {
           var path = document.createElementNS(svgNamespace, 'path');
-          assignClassAttribute(path, config.data, config);
-          var percentage = calcDataPointPercentage(config);
+          assignClassAttribute(path, data, config.threshold);
+          var percentage = calcDataPointPercentage(data, config.total);
           var d = calculatePathD($svg, 0, percentage, strokeWidth);
           path.setAttribute('d', d);
           paths.push(path);
         }
-      } else if (typeof config.data === 'object') {
-        if (Array.isArray(config.data)) {
-          handleDataArray($svg, paths, config, strokeWidth);
+      } else if (typeof data === 'object') {
+        if (Array.isArray(data)) {
+          handleDataArray($svg, paths, config, data, strokeWidth);
         } else {
-
+          console.log('invalid object type');
         }
       } else {
         console.log('type not recognized');
       }
 
-      callback(paths);
       return paths;
     }
 
@@ -233,7 +264,7 @@
       }
     }
 
-    function createText($svgElement, config) {
+    function createText($svgElement, config, data) {
       var textRemaining;
 
       if (config && config.text) {
@@ -243,13 +274,13 @@
         textRemaining.setAttribute('y', $svgElement.parent().height()/2 - 5);
 
         var value;
-        if (config.data === 'number') {
-          value = config.data;
+        if (data === 'number') {
+          value = data;
         } else {
-          value = sumArray(config.data);
+          value = sumArray(data);
         }
 
-        var total = config.total ? config.total : sumArray(config.data);
+        var total = config.total ? config.total : sumArray(data);
         textRemaining.textContent = value + ' of ' + total;
       }
 
