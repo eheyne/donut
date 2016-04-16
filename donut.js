@@ -69,8 +69,7 @@
         svgElement.setAttribute('width', $svgElement.parent().width());
         svgElement.setAttribute('height', $svgElement.parent().height());
 
-        var background = backgroundRing($svgElement, strokeWidth);
-        $svgElement.append(background);
+        createUpdateBackgroundRing($svgElement, strokeWidth);
 
         if (config) {
           var dataPaths = createDataPaths($svgElement, config, data, strokeWidth);
@@ -154,15 +153,18 @@
         x2 + ',' + y2;
     }
 
-    function backgroundRing($svg, strokeWidth) {
+    function createUpdateBackgroundRing($svgElement, strokeWidth) {
       var percentage = 100;
 
-      var path = document.createElementNS(svgNamespace, 'path');
-      path.setAttribute('class', 'background');
+      var path = $svgElement.find('path.background')[0];
+      if (path === undefined) {
+        path = document.createElementNS(svgNamespace, 'path');
+        path.setAttribute('class', 'background');
+        $svgElement.append(path);
+      }
 
-      var d = calculatePathD($svg, 0, percentage, strokeWidth);
+      var d = calculatePathD($svgElement, 0, percentage, strokeWidth);
       path.setAttribute('d', d);
-      return path;
     }
 
     function sumArray(array) {
@@ -261,8 +263,7 @@
         path.style.strokeDasharray = length + ' ' + length;
         path.style.strokeDashoffset = length;
         path.getBoundingClientRect();
-        path.style.transition = path.style.WebkitTransition = 'stroke-dashoffset ' + time + ' ease-in-out';
-        // path.style.transition = path.style.WebkitTransition = 'stroke 1s ease';
+        path.style.transition = path.style.WebkitTransition = 'stroke-dashoffset ' + time + ' ease-in-out, stroke 1s ease';
         path.style.strokeDashoffset = to;
       }
     }
