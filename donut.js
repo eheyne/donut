@@ -23,13 +23,16 @@
 
     function callApiEndPoint(svgElement, config, svgRenderCallback) {
       if (config.data.url !== undefined) {
-        // setTimeout(function() {
-          $.get(config.data.url).done(function(response) {
-            if (typeof(response) !== 'undefined' && response.length > 0) {
-              svgRenderCallback(svgElements, config, response);
+        $.get(config.data.url).done(function(response) {
+          if (typeof(response) !== 'undefined' && response.length > 0) {
+            svgRenderCallback(svgElements, config, response);
+            if (config.data.pollingInterval !== undefined) {
+              setTimeout(function() {
+                callApiEndPoint(svgElement, config, svgRenderCallback);
+              }, config.data.pollingInterval);
             }
-          });
-        // }, 500);
+          }
+        });
       }
     }
 
@@ -76,7 +79,7 @@
             animate(dataPath, config);
           });
 
-          var svgText = createText($svgElement, config, data);
+          var svgText = createUpdateText($svgElement, config, data);
           if (svgText) {
             $svgElement.append(svgText);
           }
@@ -259,17 +262,20 @@
         path.style.strokeDashoffset = length;
         path.getBoundingClientRect();
         path.style.transition = path.style.WebkitTransition = 'stroke-dashoffset ' + time + ' ease-in-out';
-        path.style.transition = path.style.WebkitTransition = 'stroke 1s ease';
+        // path.style.transition = path.style.WebkitTransition = 'stroke 1s ease';
         path.style.strokeDashoffset = to;
       }
     }
 
-    function createText($svgElement, config, data) {
+    function createUpdateText($svgElement, config, data) {
       var textRemaining;
 
       if (config && config.text) {
-        textRemaining = document.createElementNS(svgNamespace, 'text');
-        textRemaining.setAttribute('class', 'donut-text');
+        textRemaining = $svgElement.find('text.donut-text')[0];
+        if (textRemaining === undefined) {
+          textRemaining = document.createElementNS(svgNamespace, 'text');
+          textRemaining.setAttribute('class', 'donut-text');
+        }
         textRemaining.setAttribute('x', $svgElement.parent().width()/2);
         textRemaining.setAttribute('y', $svgElement.parent().height()/2 - 5);
 
