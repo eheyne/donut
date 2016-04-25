@@ -215,6 +215,7 @@
         var path = document.createElementNS(svgNamespace, 'path');
         assignClassAttribute(path, dataPoint, config.threshold, index);
         var percentage = calcDataPointPercentage(data, total, index);
+        path.setAttribute('data-percent', percentage);
         var d = calculatePathD($svg, runningTotal, percentage, strokeWidth);
         path.setAttribute('d', d);
         paths.push(path);
@@ -232,6 +233,7 @@
           var path = document.createElementNS(svgNamespace, 'path');
           assignClassAttribute(path, data, config.threshold);
           var percentage = calcDataPointPercentage(data, config.total);
+          path.setAttribute('data-percent', percentage);
           var d = calculatePathD($svg, 0, percentage, strokeWidth);
           path.setAttribute('d', d);
           paths.push(path);

@@ -182,4 +182,25 @@ describe('donut data plotting', function() {
       });
     });
   });
+
+  it('should add a data-percent attribute to the single data path', function() {
+    var donuts = $('.donuts').Donut({ total: 100, data: 25 });
+    donuts.each(function(svgIndex) {
+      var paths = $(donuts[svgIndex]).find('svg > path.donut-data');
+      expect(paths.length).to.be.equal(1);
+      expect(paths.data('percent')).to.be.equal(25);
+    });
+  });
+
+  it('should add a data-percent attribute to the data paths', function() {
+    var data = [35, 20, 15, 30]; 
+    var donuts = $('.donuts').Donut({ data: data });
+    donuts.each(function(svgIndex) {
+      var paths = $(donuts[svgIndex]).find('svg > path.donut-data');
+      expect(paths.length).to.be.equal(4);
+      paths.each(function(index) {
+        expect(paths[index].getAttribute('data-percent')).to.be.equal(data[index] + '');
+      });
+    });
+  });
 });
