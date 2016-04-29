@@ -36,7 +36,7 @@ describe('donut event handling', function() {
   };
 
   it('should handle the click event when click property passed to it', function(done) {
-    donut = $('#donut').Donut({ total: 100, data: 50, click: onClickFunc });
+    donut = $('#donut').Donut({ data: { total: 100, points: { key: "data1", value: 50 } }, click: onClickFunc });
     var svg = $('#donut').find('svg');
     svg.trigger('click');
 
@@ -47,7 +47,7 @@ describe('donut event handling', function() {
   });
 
   it('should handle the click event when invalid click property passed to it', function(done) {
-    donut = $('#donut').Donut({ total: 100, data: 50, click: undefined });
+    donut = $('#donut').Donut({ data: { total: 100, points: { key: "data1", value: 50 } }, click: undefined });
     var svg = $('#donut').find('svg');
     svg.trigger('click');
 
@@ -58,7 +58,7 @@ describe('donut event handling', function() {
   });
 
   it('should handle the hover property as an empty array', function(done) {
-    donut = $('#donut').Donut({ total: 100, data: 50, hover: [] });
+    donut = $('#donut').Donut({ data: { total: 100, points: { key: "data1", value: 50 } }, hover: [] });
     var svg = $('#donut').find('svg');
     svg.trigger('mouseenter');
 
@@ -69,7 +69,7 @@ describe('donut event handling', function() {
   });
 
   it('should handle the hover property as a scalar value', function(done) {
-    donut = $('#donut').Donut({ total: 100, data: 50, hover: onHoverFunc });
+    donut = $('#donut').Donut({ data: { total: 100, points: { key: "data1", value: 50 } }, hover: onHoverFunc });
     var svg = $('#donut').find('svg');
     svg.trigger('mouseenter');
 
@@ -80,7 +80,7 @@ describe('donut event handling', function() {
   });
 
   it('should handle the hover over event', function(done) {
-    donut = $('#donut').Donut({ total: 100, data: 50, hover: [onHoverFunc] });
+    donut = $('#donut').Donut({ data: { total: 100, points: { key: "data1", value: 50 } }, hover: [onHoverFunc] });
     var svg = $('#donut').find('svg');
     svg.trigger('mouseenter');
 
@@ -91,7 +91,7 @@ describe('donut event handling', function() {
   });
 
   it('should handle the hover leave event', function(done) {
-    donut = $('#donut').Donut({ total: 100, data: 50, hover: [undefined, onHoverLeaveFunc] });
+    donut = $('#donut').Donut({ data: { total: 100, points: { key: "data1", value: 50 } }, hover: [undefined, onHoverLeaveFunc] });
     var svg = $('#donut').find('svg');
     svg.trigger('mouseleave');
 
@@ -102,7 +102,7 @@ describe('donut event handling', function() {
   });
 
   it('should handle the hover enter and leave events', function(done) {
-    donut = $('#donut').Donut({ total: 100, data: 50, hover: [onHoverFunc, onHoverLeaveFunc] });
+    donut = $('#donut').Donut({ data: { total: 100, points: { key: "data1", value: 50 } }, hover: [onHoverFunc, onHoverLeaveFunc] });
     var svg = $('#donut').find('svg');
     svg.trigger('mouseenter');
     svg.trigger('mouseleave');

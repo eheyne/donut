@@ -38,13 +38,15 @@
 
     function initiateSvgRender(svgElements, config, svgRenderCallback) {
       if (config !== undefined && svgRenderCallback !== undefined) {
-        if (typeof config.data === 'number') {
-          svgRenderCallback(svgElements, config, config.data);
-        } else if (typeof config.data === 'object') {
-          if (Array.isArray(config.data)) {
+        if (typeof config.data.points === 'object') {
+          if (Array.isArray(config.data.points)) {
             svgRenderCallback(svgElements, config, config.data);
           } else {
-            callApiEndPoint(svgElements, config, svgRenderCallback);
+            if (config.data.url !== undefined) {
+              callApiEndPoint(svgElements, config, svgRenderCallback);
+            } else {
+              svgRenderCallback(svgElements, config, config.data);
+            }
           }
         } else {
           console.log('config type not valid');
@@ -171,22 +173,22 @@
       var sum = 0;
       for(var i = 0, n = array.length; i < n; i++) 
       { 
-        sum += array[i]; 
+        sum += array[i].value; 
       }
       return sum;
     }
 
-    function calcPercentage(data, total) {
-      return (data / total) * 100;
+    function calcPercentage(dataPoint, total) {
+      return (dataPoint.value / total) * 100;
     }
 
     function calcDataPointPercentage(data, total, index) {
       var percentage;
 
-      if (typeof data === 'number') {
-        percentage = calcPercentage(data, config.total);
+      if (Array.isArray(data.points)) {
+        percentage = calcPercentage(data.points[index], total); 
       } else {
-        percentage = calcPercentage(data[index], total); 
+        percentage = calcPercentage(data.points, total);
       }
 
       return percentage;
@@ -196,7 +198,7 @@
       index = index || 0;
       var pathClass = donutPathBaseClassName + index;
       if (threshold) {
-        if (dataPoint > threshold) {
+        if (dataPoint.value > threshold) {
           path.setAttribute('class', donutPathBaseClassName + ' ' + pathClass + ' above-threshold');
         } else {
           path.setAttribute('class', donutPathBaseClassName + ' ' + pathClass + ' below-threshold');
@@ -207,11 +209,11 @@
     }
 
     function handleDataArray($svg, paths, config, data, strokeWidth) {
-      var total = config.total ? config.total : sumArray(data);
+      var total = data.total ? data.total : sumArray(data.points);
       var runningTotal = 0;
       var index = 0;
       
-      data.forEach(function(dataPoint) {
+      data.points.forEach(function(dataPoint) {
         var path = document.createElementNS(svgNamespace, 'path');
         assignClassAttribute(path, dataPoint, config.threshold, index);
         var percentage = calcDataPointPercentage(data, total, index);
@@ -227,23 +229,19 @@
     function createDataPaths($svg, config, data, strokeWidth) {
       var paths = [];
 
-      if (typeof data === 'number') {
-        if (config.total) {
+      if (typeof data === 'object') {
+        if (Array.isArray(data.points)) {
+          handleDataArray($svg, paths, config, data, strokeWidth);
+        } else if (data.total) {
           var path = document.createElementNS(svgNamespace, 'path');
           assignClassAttribute(path, data, config.threshold);
-          var percentage = calcDataPointPercentage(data, config.total);
+          var percentage = calcDataPointPercentage(data, data.total);
           var d = calculatePathD($svg, 0, percentage, strokeWidth);
           path.setAttribute('d', d);
           paths.push(path);
         }
-      } else if (typeof data === 'object') {
-        if (Array.isArray(data)) {
-          handleDataArray($svg, paths, config, data, strokeWidth);
-        } else {
-          console.log('invalid object type');
-        }
       } else {
-        console.log('type not recognized');
+        console.log('data points type not recognized');
       }
 
       return paths;
@@ -281,13 +279,13 @@
         textRemaining.setAttribute('y', $svgElement.parent().height()/2 - 5);
 
         var value;
-        if (data === 'number') {
-          value = data;
+        if (Array.isArray(data.points)) {
+          value = sumArray(data.points);
         } else {
-          value = sumArray(data);
+          value = data;
         }
 
-        var total = config.total ? config.total : sumArray(data);
+        var total = data.total ? data.total : value;
         textRemaining.textContent = value + ' of ' + total;
       }
 
