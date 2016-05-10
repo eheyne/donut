@@ -24,7 +24,7 @@
     function callApiEndPoint(svgElement, config, svgRenderCallback) {
       if (config.data.url !== undefined) {
         $.get(config.data.url).done(function(response) {
-          if (typeof(response) !== 'undefined' && response.length > 0) {
+          if (typeof(response) !== 'undefined') {
             svgRenderCallback(svgElements, config, response);
             if (config.data.pollingInterval !== undefined) {
               setTimeout(function() {
@@ -38,7 +38,7 @@
 
     function initiateSvgRender(svgElements, config, svgRenderCallback) {
       if (config !== undefined && svgRenderCallback !== undefined) {
-        if (typeof config.data.points === 'object') {
+        if (typeof config.data === 'object') {
           if (Array.isArray(config.data.points)) {
             svgRenderCallback(svgElements, config, config.data);
           } else {

@@ -15,7 +15,13 @@ function randomize() {
 }
 
 app.get('/api/data', function(req, res) {
-  res.json([randomize(), randomize(), randomize(), randomize()]);
+  var data = { total: 100, points: [
+    { key: "data1", value: randomize() }, 
+    { key: "data2", value: randomize() }, 
+    { key: "data3", value: randomize() }, 
+    { key: "data4", value: randomize() } ] };
+
+  res.json(data);
 });
 
 app.listen(app.get('port'), function() {
