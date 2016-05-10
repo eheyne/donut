@@ -32,22 +32,22 @@ svg#donut2 > text.donut-text {
   font-size: 46px;
 }
 
-svg.donut > path.donut-data0 {
+svg.donut > path.donut-data-data1 {
   stroke: #ED1B24;
 }
 
-svg.donut > path.donut-data1 {
+svg.donut > path.donut-data-data2 {
   stroke: #F3EA43;
 }
 
-svg.donut > path.donut-data2 {
+svg.donut > path.donut-data-data3 {
   stroke: #00A3E8;
 }
 
-svg.donut > path.donut-data3 {
+svg.donut > path.donut-data-data4 {
   stroke: #5701AE;
 }
 
-svg.donut > path.donut-data3.above-threshold {
+svg.donut > path.donut-data-data4.above-threshold {
   stroke: #06B800;
 }

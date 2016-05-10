@@ -196,7 +196,7 @@
 
     function assignClassAttribute(path, dataPoint, threshold, index) {
       index = index || 0;
-      var pathClass = donutPathBaseClassName + index;
+      var pathClass = donutPathBaseClassName + '-' + dataPoint.key;
       if (threshold) {
         if (dataPoint.value > threshold) {
           path.setAttribute('class', donutPathBaseClassName + ' ' + pathClass + ' above-threshold');
