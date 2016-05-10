@@ -171,94 +171,115 @@ describe('donut data plotting', function() {
     });
   });
 
-  // it('should add class above-threshold when the threshold is given, to a single path when only one data point and it is above threshold', function() {
-  //   var data = { total: 100, points: { key: "data1", value: 25 } };
-  //   var donuts = $('.donuts').Donut({ data: data, threshold: 20 });
-  //   expect($(donuts).length).to.be.equal(2);
-  //   donuts.each(function(svgIndex) {
-  //     var paths = $(donuts[svgIndex]).find('svg > path.donut-data');
-  //     expect(paths.length).to.be.equal(1);
-  //     paths.each(function(index) {
-  //       expect($(paths[index]).attr('class')).to.include('above-threshold');
-  //     });
-  //   });
-  // });
+  it('should add class above-threshold when the threshold is given, to a single path when only one data point and it is above threshold', function() {
+    var data = { total: 100, points: { key: "data1", value: 25 } };
+    var donuts = $('.donuts').Donut({ data: data, threshold: 20 });
+    expect($(donuts).length).to.be.equal(2);
+    donuts.each(function(svgIndex) {
+      var paths = $(donuts[svgIndex]).find('svg > path.donut-data');
+      expect(paths.length).to.be.equal(1);
+      paths.each(function(index) {
+        expect($(paths[index]).attr('class')).to.include('above-threshold');
+      });
+    });
+  });
 
-  // it('should add class above-threshold to all paths when it is above threshold', function() {
-  //   var donuts = $('.donuts').Donut({ data: [25, 25, 25, 25], threshold: 20 });
-  //   expect($(donuts).length).to.be.equal(2);
-  //   donuts.each(function(svgIndex) {
-  //     var paths = $(donuts[svgIndex]).find('svg > path.donut-data');
-  //     expect(paths.length).to.be.equal(4);
-  //     paths.each(function(index) {
-  //       expect($(paths[index]).attr('class')).to.include('above-threshold');
-  //     });
-  //   });
-  // });
+  it('should add class above-threshold to all paths when it is above threshold', function() {
+    var data = { points: [
+      { key: "data1", value: 25 }, 
+      { key: "data2", value: 25 }, 
+      { key: "data3", value: 25 }, 
+      { key: "data4", value: 25 } ] };
+    var donuts = $('.donuts').Donut({ data: data, threshold: 20 });
+    expect($(donuts).length).to.be.equal(2);
+    donuts.each(function(svgIndex) {
+      var paths = $(donuts[svgIndex]).find('svg > path.donut-data');
+      expect(paths.length).to.be.equal(4);
+      paths.each(function(index) {
+        expect($(paths[index]).attr('class')).to.include('above-threshold');
+      });
+    });
+  });
 
-  // it('should add class below-threshold when the threshold is given and the data point is below threshold', function() {
-  //   var donuts = $('.donuts').Donut({ total: 100, data: 25, threshold: 30});
-  //   expect($(donuts).length).to.be.equal(2);
-  //   donuts.each(function(svgIndex) {
-  //     var paths = $(donuts[svgIndex]).find('svg > path.donut-data');
-  //     expect(paths.length).to.be.equal(1);
-  //     paths.each(function(index) {
-  //       expect($(paths[index]).attr('class')).to.include('below-threshold');
-  //     });
-  //   });
-  // });
+  it('should add class below-threshold when the threshold is given and the data point is below threshold', function() {
+    var data = { total: 100, points: { key: "data1", value: 25 } };
+    var donuts = $('.donuts').Donut({ data: data, threshold: 30});
+    expect($(donuts).length).to.be.equal(2);
+    donuts.each(function(svgIndex) {
+      var paths = $(donuts[svgIndex]).find('svg > path.donut-data');
+      expect(paths.length).to.be.equal(1);
+      paths.each(function(index) {
+        expect($(paths[index]).attr('class')).to.include('below-threshold');
+      });
+    });
+  });
 
-  // it('should add class below-threshold to all paths when it is below threshold', function() {
-  //   var donuts = $('.donuts').Donut({ data: [25, 25, 25, 25], threshold: 30});
-  //   expect($(donuts).length).to.be.equal(2);
-  //   donuts.each(function(svgIndex) {
-  //     var paths = $(donuts[svgIndex]).find('svg > path.donut-data');
-  //     expect(paths.length).to.be.equal(4);
-  //     paths.each(function(index) {
-  //       expect($(paths[index]).attr('class')).to.include('below-threshold');
-  //     });
-  //   });
-  // });
+  it('should add class below-threshold to all paths when it is below threshold', function() {
+    var data = { points: [
+      { key: "data1", value: 25 }, 
+      { key: "data2", value: 25 }, 
+      { key: "data3", value: 25 }, 
+      { key: "data4", value: 25 } ] };
+    var donuts = $('.donuts').Donut({ data: data, threshold: 30});
+    expect($(donuts).length).to.be.equal(2);
+    donuts.each(function(svgIndex) {
+      var paths = $(donuts[svgIndex]).find('svg > path.donut-data');
+      expect(paths.length).to.be.equal(4);
+      paths.each(function(index) {
+        expect($(paths[index]).attr('class')).to.include('below-threshold');
+      });
+    });
+  });
 
-  // it('should add a data-percent attribute to the single data path', function() {
-  //   var donuts = $('.donuts').Donut({ total: 125, data: 25 });
-  //   donuts.each(function(svgIndex) {
-  //     var paths = $(donuts[svgIndex]).find('svg > path.donut-data');
-  //     expect(paths.length).to.be.equal(1);
-  //     expect(paths.data('percent')).to.be.equal(20);
-  //   });
-  // });
+  it('should add a data-percent attribute to the single data path', function() {
+    var data = { total: 125, points: { key: "data1", value: 25 } };
+    var donuts = $('.donuts').Donut({ data: data });
+    donuts.each(function(svgIndex) {
+      var paths = $(donuts[svgIndex]).find('svg > path.donut-data');
+      expect(paths.length).to.be.equal(1);
+      expect(paths.data('percent')).to.be.equal(20);
+    });
+  });
 
-  // it('should add a data-percent attribute to the data paths', function() {
-  //   var data = [35, 20, 15, 30]; 
-  //   var donuts = $('.donuts').Donut({ data: data });
-  //   donuts.each(function(svgIndex) {
-  //     var paths = $(donuts[svgIndex]).find('svg > path.donut-data');
-  //     expect(paths.length).to.be.equal(4);
-  //     paths.each(function(index) {
-  //       expect(paths[index].getAttribute('data-percent')).to.be.equal(data[index] + '');
-  //     });
-  //   });
-  // });
+  it('should add a data-percent attribute to the data paths', function() {
+    var data = { points: [
+      { key: "data1", value: 35 }, 
+      { key: "data2", value: 20 }, 
+      { key: "data3", value: 15 }, 
+      { key: "data4", value: 30 } ] };
+    var donuts = $('.donuts').Donut({ data: data });
+    donuts.each(function(svgIndex) {
+      var paths = $(donuts[svgIndex]).find('svg > path.donut-data');
+      expect(paths.length).to.be.equal(4);
+      paths.each(function(index) {
+        expect(paths[index].getAttribute('data-percent')).to.be.equal(data.points[index].value + '');
+      });
+    });
+  });
 
-  // it('should add a data-value attribute to the single data path', function() {
-  //   var donuts = $('.donuts').Donut({ total: 100, data: 25 });
-  //   donuts.each(function(svgIndex) {
-  //     var paths = $(donuts[svgIndex]).find('svg > path.donut-data');
-  //     expect(paths.length).to.be.equal(1);
-  //     expect(paths.data('value')).to.be.equal(25);
-  //   });
-  // });
+  it('should add a data-value attribute to the single data path', function() {
+    var data = { total: 125, points: { key: "data1", value: 25 } };
+    var donuts = $('.donuts').Donut({ data: data });
+    donuts.each(function(svgIndex) {
+      var paths = $(donuts[svgIndex]).find('svg > path.donut-data');
+      expect(paths.length).to.be.equal(1);
+      expect(paths.data('value')).to.be.equal(data.points.value);
+    });
+  });
 
-  // it('should add a data-value attribute to the data paths', function() {
-  //   var data = [35, 20, 15, 30]; 
-  //   var donuts = $('.donuts').Donut({ data: data });
-  //   donuts.each(function(svgIndex) {
-  //     var paths = $(donuts[svgIndex]).find('svg > path.donut-data');
-  //     expect(paths.length).to.be.equal(4);
-  //     paths.each(function(index) {
-  //       expect(paths[index].getAttribute('data-value')).to.be.equal(data[index] + '');
-  //     });
-  //   });
-  // });
+  it('should add a data-value attribute to the data paths', function() {
+    var data = { points: [
+      { key: "data1", value: 35 }, 
+      { key: "data2", value: 20 }, 
+      { key: "data3", value: 15 }, 
+      { key: "data4", value: 30 } ] };
+    var donuts = $('.donuts').Donut({ data: data });
+    donuts.each(function(svgIndex) {
+      var paths = $(donuts[svgIndex]).find('svg > path.donut-data');
+      expect(paths.length).to.be.equal(4);
+      paths.each(function(index) {
+        expect(paths[index].getAttribute('data-value')).to.be.equal(data.points[index].value + '');
+      });
+    });
+  });
 });
