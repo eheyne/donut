@@ -71,7 +71,7 @@ var donuts = $('.donuts').donut({ data: data });
 or
 
 ```javascript
-var data = { url: 'http://some/end/point };
+var data = { url: 'http://some/end/point' };
 var donuts = $('.donuts').donut({ data: data });
 
 ```
