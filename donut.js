@@ -77,7 +77,7 @@
           var dataPaths = createDataPaths($svgElement, config, data, strokeWidth);
           dataPaths.forEach(function(dataPath) {
             $svgElement.append(dataPath);
-            animate(dataPath, config);
+            // animate(dataPath, config);
           });
 
           var svgText = createUpdateText($svgElement, config, data);
@@ -111,9 +111,9 @@
     }
 
     function getSvgPathStrokeWidthAsDefinedInCSS($svg) {
-      $svg.append('<path/>');
-      var strokeWidth = $svg.find('path').css('stroke-width').replace(/[^-\d\.]/g, '');
-      $svg.find('path').remove();
+      $svg.append('<path class="temp"/>');
+      var strokeWidth = $svg.find('path.temp').css('stroke-width').replace(/[^-\d\.]/g, '');
+      $svg.find('path.temp').remove();
 
       return strokeWidth;
     }
@@ -194,8 +194,7 @@
       return percentage;
     }
 
-    function assignClassAttribute(path, dataPoint, threshold, index) {
-      index = index || 0;
+    function assignClassAttribute(path, dataPoint, threshold) {
       var pathClass = donutPathBaseClassName + '-' + dataPoint.key;
       if (threshold) {
         if (dataPoint.value > threshold) {
@@ -208,20 +207,30 @@
       }
     }
 
+    function dataPathFactory($svg, paths, dataPoint, threshold) {
+      var pathToFind = 'path.' + donutPathBaseClassName + '-' + dataPoint.key;
+      var path = $svg.find(pathToFind)[0];
+      if (path === undefined) {
+        path = document.createElementNS(svgNamespace, 'path');
+        assignClassAttribute(path, dataPoint, threshold);
+        paths.push(path);
+      }
+
+      return path;
+    }
+
     function handleDataArray($svg, paths, config, data, strokeWidth) {
       var total = data.total ? data.total : sumArray(data.points);
       var runningTotal = 0;
       var index = 0;
       
       data.points.forEach(function(dataPoint) {
-        var path = document.createElementNS(svgNamespace, 'path');
-        assignClassAttribute(path, dataPoint, config.threshold, index);
+        var path = dataPathFactory($svg, paths, dataPoint, config.threshold);
         var percentage = calcDataPointPercentage(data, total, index);
         path.setAttribute('data-percent', percentage);
         path.setAttribute('data-value', data.points[index].value);
         var d = calculatePathD($svg, runningTotal, percentage, strokeWidth);
         path.setAttribute('d', d);
-        paths.push(path);
 
         index++;
         runningTotal += calcPercentage(dataPoint, total);
@@ -235,14 +244,12 @@
         if (Array.isArray(data.points)) {
           handleDataArray($svg, paths, config, data, strokeWidth);
         } else if (data.total) {
-          var path = document.createElementNS(svgNamespace, 'path');
-          assignClassAttribute(path, data.points, config.threshold);
+          var path = dataPathFactory($svg, paths, data.points, config.threshold);
           var percentage = calcDataPointPercentage(data, data.total);
           path.setAttribute('data-percent', percentage);
           path.setAttribute('data-value', data.points.value);
           var d = calculatePathD($svg, 0, percentage, strokeWidth);
           path.setAttribute('d', d);
-          paths.push(path);
         }
       } else {
         console.log('data points type not recognized');
