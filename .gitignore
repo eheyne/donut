@@ -16,3 +16,4 @@ test-reports/
 *.un~
 Session.vim
 .netrwhist
+npm-debug.log
