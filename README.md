@@ -135,3 +135,9 @@ var donuts = $('.donuts').Donut({ data: data, animate: '5s' });
 ``` javascript
 var donuts = $('.donuts').Donut({ data: data, text: true });
 ```
+
+* threshold - adds classes `above-threshold` or `below-threshold` to the svg data path based on the data point value compared with the threshold value
+
+``` javascript
+var donuts = $('.donuts').Donut({ data: data, threshold: 20 });
+```
